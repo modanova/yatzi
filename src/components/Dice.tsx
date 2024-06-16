@@ -6,10 +6,10 @@ interface DiceProps extends HTMLProps<HTMLDivElement> {
 }
 
 function Dice(props: DiceProps) {
-  const { pipsCount, ...attributes } = props;
+  const { pipsCount, className, ...attributes } = props;
   const pips = new Array(pipsCount).fill(<span className="pip"></span>);
   return (
-    <div className="face" {...attributes}>
+    <div className={"face " + className} {...attributes}>
       {pips}
     </div>
   );

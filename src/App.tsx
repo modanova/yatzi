@@ -7,9 +7,16 @@ const rollNumber = (): number => {
   return Math.floor(Math.random() * 6) + 1;
 };
 
-const rollDice = () => {
+const rollDiceNew = () => {
   const dice = new Array(5).fill(0);
   return dice.map(() => rollNumber());
+};
+
+const rollDice = (roll: number[], kept: string[]) => {
+  return roll.map((die, i) => {
+    if (kept.includes(i.toString())) return die;
+    return rollNumber();
+  });
 };
 
 const keep = (
@@ -29,7 +36,7 @@ const keep = (
 };
 
 function App() {
-  const [roll, setRoll] = useState<any[]>(rollDice());
+  const [roll, setRoll] = useState<any[]>(rollDiceNew());
   const [kept, setKept] = useState<string[]>([]);
 
   useEffect(() => {
@@ -48,18 +55,28 @@ function App() {
               const target = e.target as HTMLDivElement;
               keep(target?.id, kept, setKept);
             }}
+            className={kept.includes(i.toString()) ? "kept" : ""}
           />
         ))}
       </div>
       <div className="game-buttons">
         <Button
           onClick={() => {
-            setRoll(rollDice);
+            setRoll(rollDiceNew);
+            setKept([]);
           }}
           variant="outlined"
           color="success"
         >
-          Roll
+          Roll new
+        </Button>
+        <Button
+          onClick={() => {
+            setRoll(() => rollDice(roll, kept));
+          }}
+          variant="outlined"
+        >
+          Roll available only
         </Button>
       </div>
     </div>
