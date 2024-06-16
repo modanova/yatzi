@@ -1,8 +1,18 @@
+import { HTMLProps } from "react";
 import "./styles.css";
 
-function Dice(props: { pipsCount: number }) {
-  const pips = new Array(props.pipsCount).fill(<span className="pip"></span>);
-  return <div className="face">{pips}</div>;
+interface DiceProps extends HTMLProps<HTMLDivElement> {
+  pipsCount: number;
+}
+
+function Dice(props: DiceProps) {
+  const { pipsCount, ...attributes } = props;
+  const pips = new Array(pipsCount).fill(<span className="pip"></span>);
+  return (
+    <div className="face" {...attributes}>
+      {pips}
+    </div>
+  );
 }
 
 export default Dice;
