@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Dice from "./components/Dice";
 import Button from "@mui/material/Button";
+import ScoreBoard from "./components/Score";
 
 const rollNumber = (): number => {
   return Math.floor(Math.random() * 6) + 1;
@@ -42,11 +43,14 @@ function App() {
   const [round, setRound] = useState<number>(0);
 
   useEffect(() => {
-    console.log(roll, kept, round);
-  }, [roll, kept, round]);
+    console.log(roll, kept, turns, round);
+  }, [roll, kept, turns, round]);
 
   return (
     <div className="App">
+      <div className="score-board">
+        <ScoreBoard scorePoints={{}} />
+      </div>
       <div className="dice-row">
         <p>Turns left: {3 - turns}</p>
         {roll.map((rolled, i) => (
@@ -63,6 +67,24 @@ function App() {
         ))}
       </div>
       <div className="game-buttons">
+        {turns < 3 && (
+          <Button
+            onClick={() => {
+              if (turns === 3) {
+                setRoll(rollDiceNew);
+                setKept([]);
+                setTurns(1);
+                setRound((round) => round + 1);
+                return;
+              }
+              setRoll(() => rollDice(roll, kept));
+              setTurns((turns) => turns + 1);
+            }}
+            variant="outlined"
+          >
+            Roll available only
+          </Button>
+        )}
         <Button
           onClick={() => {
             setRoll(rollDiceNew);
@@ -73,22 +95,6 @@ function App() {
           color="success"
         >
           Roll new
-        </Button>
-        <Button
-          onClick={() => {
-            if (turns === 3) {
-              setRoll(rollDiceNew);
-              setKept([]);
-              setTurns(1);
-              setRound((round) => round + 1);
-              return;
-            }
-            setRoll(() => rollDice(roll, kept));
-            setTurns((turns) => turns + 1);
-          }}
-          variant="outlined"
-        >
-          Roll available only
         </Button>
       </div>
     </div>

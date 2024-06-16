@@ -7,6 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.score-board {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .dice-row {
   display: flex;
   align-items: center;
