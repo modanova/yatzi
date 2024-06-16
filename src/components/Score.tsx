@@ -1,13 +1,12 @@
 type YatziBonus =
   | number
-  | "topTotal"
   | "shortStraight"
   | "largeStraight"
   | "fullHouse"
   | "yatzi"
   | "bottomTotal";
 
-type ScorePoints = {
+export type ScorePoints = {
   [key in YatziBonus]?: number;
 };
 
