@@ -38,14 +38,17 @@ const keep = (
 function App() {
   const [roll, setRoll] = useState<any[]>(rollDiceNew());
   const [kept, setKept] = useState<string[]>([]);
+  const [turns, setTurns] = useState<number>(0);
+  const [round, setRound] = useState<number>(0);
 
   useEffect(() => {
-    console.log(roll, kept);
-  }, [roll, kept]);
+    console.log(roll, kept, round);
+  }, [roll, kept, round]);
 
   return (
     <div className="App">
       <div className="dice-row">
+        <p>Turns left: {3 - turns}</p>
         {roll.map((rolled, i) => (
           <Dice
             pipsCount={rolled}
@@ -64,6 +67,7 @@ function App() {
           onClick={() => {
             setRoll(rollDiceNew);
             setKept([]);
+            setTurns(1);
           }}
           variant="outlined"
           color="success"
@@ -72,7 +76,15 @@ function App() {
         </Button>
         <Button
           onClick={() => {
+            if (turns === 3) {
+              setRoll(rollDiceNew);
+              setKept([]);
+              setTurns(1);
+              setRound((round) => round + 1);
+              return;
+            }
             setRoll(() => rollDice(roll, kept));
+            setTurns((turns) => turns + 1);
           }}
           variant="outlined"
         >
