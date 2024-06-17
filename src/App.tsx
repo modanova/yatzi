@@ -40,6 +40,31 @@ const matching = (number: number, amount: number) => {
   return number * amount;
 };
 
+const ofAKind = (roll: number[], size: "three" | "four") => {
+  const sorted: number[] = roll.sort();
+  if (new Set(sorted).size === 2) {
+    const counts = sorted.reduce(
+      (acc: { [key: string | number]: number }, value) => ({
+        ...acc,
+        [value]: value in acc ? acc[value] + 1 : 1,
+      }),
+      {}
+    );
+
+    if (
+      size === "three" &&
+      Object.values(counts).some((value: number) => value >= 3)
+    )
+      return roll.reduce((acc, curr) => acc + curr);
+    if (
+      size === "four" &&
+      Object.values(counts).some((value: number) => value >= 4)
+    )
+      return roll.reduce((acc, curr) => acc + curr);
+  }
+  return 0;
+};
+
 const straight = (roll: number[], size: "large" | "short") => {
   const sorted = Array.from(new Set(roll.sort()));
   if (sorted.length <= 4) return 0;
@@ -71,7 +96,7 @@ const fullHouse = (roll: number[]) => {
     const counts = sorted.reduce(
       (acc: { [key: string | number]: number }, value) => ({
         ...acc,
-        [value]: value in acc ? acc[value] + 1 : 0,
+        [value]: value in acc ? acc[value] + 1 : 1,
       }),
       {}
     );
@@ -93,10 +118,13 @@ const calculatePoints = (roll: number[]): ScorePoints => {
     4: matching(4, roll.filter((die) => die === 4).length),
     5: matching(5, roll.filter((die) => die === 5).length),
     6: matching(6, roll.filter((die) => die === 6).length),
+    three: ofAKind(roll, "three"),
+    four: ofAKind(roll, "four"),
     shortStraight: straight(roll, "short"),
     largeStraight: straight(roll, "large"),
     fullHouse: fullHouse(roll),
     yatzi: yatzi(roll),
+    chance: roll.reduce((acc, curr) => acc + curr),
   };
 };
 function App() {
@@ -115,7 +143,7 @@ function App() {
   return (
     <div className="App">
       <div className="score-board">
-        <ScoreBoard scorePoints={scoreOptions} />
+        <ScoreBoard points={scoreOptions} />
       </div>
       <div className="dice-row">
         <p>Turns left: {3 - turns}</p>
@@ -145,7 +173,10 @@ function App() {
                 setScoreOptions(calculatePoints(newRoll));
                 return;
               }
-              setRoll(() => rollDice(roll, kept));
+              const newRoll = rollDice(roll, kept);
+              setRoll(newRoll);
+              setScoreOptions(calculatePoints(newRoll));
+              setRound((round) => round + 1);
               setTurns((turns) => turns + 1);
             }}
             variant="outlined"
