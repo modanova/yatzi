@@ -5,7 +5,8 @@ type YatziBonus =
   | 4
   | 5
   | 6
-  // | "four"
+  | "three"
+  | "four"
   | "shortStraight"
   | "shortStraight"
   | "largeStraight"
@@ -39,47 +40,55 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Ones</td>
-        <td>{points[1] || 0} </td>
+        <td>{points[1]} </td>
       </tr>
       <tr>
         <td>Twos</td>
-        <td>{points[2] || 0} </td>
+        <td>{points[2]} </td>
       </tr>
       <tr>
         <td>Threes</td>
-        <td>{points[3] || 0} </td>
+        <td>{points[3]} </td>
       </tr>
       <tr>
         <td>Fours</td>
-        <td>{points[4] || 0} </td>
+        <td>{points[4]} </td>
       </tr>
       <tr>
         <td>Fives</td>
-        <td>{points[5] || 0} </td>
+        <td>{points[5]} </td>
       </tr>
       <tr>
         <td>Sixes</td>
-        <td>{points[6] || 0} </td>
+        <td>{points[6]} </td>
       </tr>
       <tr>
         <td>Top Total</td>
         <td>{topTotal}</td>
       </tr>
       <tr>
+        <td>Three of a kind</td>
+        <td>{points["three"]} </td>
+      </tr>
+      <tr>
+        <td>Four of a kind</td>
+        <td>{points["four"]} </td>
+      </tr>
+      <tr>
         <td>Short Straight</td>
-        <td>{points["shortStraight"] || 0} </td>
+        <td>{points["shortStraight"]} </td>
       </tr>
       <tr>
         <td>Large Straight</td>
-        <td>{points["largeStraight"] || 0} </td>
+        <td>{points["largeStraight"]} </td>
       </tr>
       <tr>
         <td>Full House</td>
-        <td>{points["fullHouse"] || 0} </td>
+        <td>{points["fullHouse"]} </td>
       </tr>
       <tr>
         <td>Yatzi</td>
-        <td>{points["yatzi"] || 0} </td>
+        <td>{points["yatzi"]} </td>
       </tr>
       <tr>
         <td>Chance</td>
