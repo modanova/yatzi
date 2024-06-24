@@ -3,6 +3,7 @@ import "./App.css";
 import Dice from "./components/Dice";
 import Button from "@mui/material/Button";
 import ScoreBoard, { ScorePoints } from "./components/Score";
+import { calculatePoints } from "./helpers";
 
 const rollNumber = (): number => {
   return Math.floor(Math.random() * 6) + 1;
@@ -110,23 +111,6 @@ const yatzi = (roll: number[]) => {
   return new Set(roll).size === 1 ? 50 : 0;
 };
 
-const calculatePoints = (roll: number[]): ScorePoints => {
-  return {
-    1: matching(1, roll.filter((die) => die === 1).length),
-    2: matching(2, roll.filter((die) => die === 2).length),
-    3: matching(3, roll.filter((die) => die === 3).length),
-    4: matching(4, roll.filter((die) => die === 4).length),
-    5: matching(5, roll.filter((die) => die === 5).length),
-    6: matching(6, roll.filter((die) => die === 6).length),
-    three: ofAKind(roll, "three"),
-    four: ofAKind(roll, "four"),
-    shortStraight: straight(roll, "short"),
-    largeStraight: straight(roll, "large"),
-    fullHouse: fullHouse(roll),
-    yatzi: yatzi(roll),
-    chance: roll.reduce((acc, curr) => acc + curr),
-  };
-};
 function App() {
   const [roll, setRoll] = useState<any[]>(rollDiceNew());
   const [kept, setKept] = useState<string[]>([]);
