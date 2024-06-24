@@ -21,14 +21,14 @@ export type ScorePoints = {
 
 interface BoardProps {
   points: ScorePoints;
+  scoreKept: Partial<ScorePoints>;
+  setScoreKept: Dispatch<SetStateAction<Partial<ScorePoints>>>;
   turnOver: boolean;
   setTurnOver: Dispatch<React.SetStateAction<Partial<boolean>>>;
 }
 
 function ScoreBoard(props: BoardProps) {
-  const { points, turnOver, setTurnOver } = props;
-  const scoreKeep: Partial<ScorePoints> = { one: 6, four: 12 };
-  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>(scoreKeep);
+  const { points, scoreKept, setScoreKept, turnOver, setTurnOver } = props;
 
   const topTotal = calculateTopTotal([
     points["one"] +
@@ -64,7 +64,7 @@ function ScoreBoard(props: BoardProps) {
           }
           setScoreKept((score) => ({
             ...score,
-            [id as SameNumberWords]: points[id as SameNumberWords],
+            [id as SameNumberWords]: points[id as SameNumberWords] || "/",
           }));
           setTurnOver(true);
         }

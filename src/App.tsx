@@ -13,18 +13,23 @@ function App() {
   const [scoreOptions, setScoreOptions] = useState<ScorePoints>(
     calculatePoints(roll)
   );
-  const [score, setScore] = useState<Partial<ScorePoints>>({});
+
+  const scoreKeep: Partial<ScorePoints> = { one: 6, four: 12 };
+
+  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>(scoreKeep);
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
-  useEffect(() => {
-    // console.log(roll, kept, turns, round);
-  }, [roll, kept, turns, round]);
+  // useEffect(() => {
+  // console.log(roll, kept, turns, round)
+  // }, [roll, kept, turns, round]);
 
   return (
     <div className="App">
       <div className="score-board">
         <ScoreBoard
           points={scoreOptions}
+          scoreKept={scoreKept}
+          setScoreKept={setScoreKept}
           turnOver={turnOver}
           setTurnOver={setTurnOver}
         />
