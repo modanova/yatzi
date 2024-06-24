@@ -1,0 +1,23 @@
+
+
+.table td {
+    width: 125px;
+    height: 25px;
+    background-color:aliceblue;
+    padding: 5px;
+    font-size: 18px;
+    
+}
+
+.kept-score {
+    color: green;
+    font-weight: 700;
+}
+
+.score-option {
+    color: red;
+}
+
+.totals {
+    font-style: italic;
+}

@@ -3,147 +3,41 @@ import "./App.css";
 import Dice from "./components/Dice";
 import Button from "@mui/material/Button";
 import ScoreBoard, { ScorePoints } from "./components/Score";
+import { calculatePoints, keep, rollDice, rollDiceNew } from "./helpers";
+import TransitionsModal from "./components/Modal";
 
-const rollNumber = (): number => {
-  return Math.floor(Math.random() * 6) + 1;
-};
-
-const rollDiceNew = () => {
-  const dice = new Array(5).fill(0);
-  return dice.map(() => rollNumber());
-};
-
-const rollDice = (roll: number[], kept: string[]) => {
-  return roll.map((die, i) => {
-    if (kept.includes(i.toString())) return die;
-    return rollNumber();
-  });
-};
-
-const keep = (
-  index: string,
-  kept: string[],
-  setKept: React.Dispatch<React.SetStateAction<any[]>>
-) => {
-  const newKept = [...kept];
-  if (newKept.includes(index)) {
-    newKept.splice(newKept.indexOf(index), 1);
-  } else {
-    newKept.push(index);
-  }
-  setKept(newKept.sort().filter(Boolean));
-
-  return [];
-};
-
-const matching = (number: number, amount: number) => {
-  return number * amount;
-};
-
-const ofAKind = (roll: number[], size: "three" | "four") => {
-  const sorted: number[] = roll.sort();
-  if (new Set(sorted).size === 2) {
-    const counts = sorted.reduce(
-      (acc: { [key: string | number]: number }, value) => ({
-        ...acc,
-        [value]: value in acc ? acc[value] + 1 : 1,
-      }),
-      {}
-    );
-
-    if (
-      size === "three" &&
-      Object.values(counts).some((value: number) => value >= 3)
-    )
-      return roll.reduce((acc, curr) => acc + curr);
-    if (
-      size === "four" &&
-      Object.values(counts).some((value: number) => value >= 4)
-    )
-      return roll.reduce((acc, curr) => acc + curr);
-  }
-  return 0;
-};
-
-const straight = (roll: number[], size: "large" | "short") => {
-  const sorted = Array.from(new Set(roll.sort()));
-  if (sorted.length <= 4) return 0;
-
-  if (
-    size === "large" &&
-    sorted.reduce((acc: number, next: number) => {
-      if (next === acc + 1) acc++;
-      return acc;
-    }, 0) > 4
-  )
-    return 40;
-
-  if (
-    size === "short" &&
-    sorted.reduce((acc: number, next: number) => {
-      if (next === acc + 1) acc++;
-      return acc;
-    }, 0) >= 4
-  )
-    return 30;
-
-  return 0;
-};
-
-const fullHouse = (roll: number[]) => {
-  const sorted: number[] = roll.sort();
-  if (new Set(sorted).size === 2) {
-    const counts = sorted.reduce(
-      (acc: { [key: string | number]: number }, value) => ({
-        ...acc,
-        [value]: value in acc ? acc[value] + 1 : 1,
-      }),
-      {}
-    );
-
-    if (Object.values(counts).every((value: number) => value >= 2)) return 25;
-  }
-  return 0;
-};
-
-const yatzi = (roll: number[]) => {
-  return new Set(roll).size === 1 ? 50 : 0;
-};
-
-const calculatePoints = (roll: number[]): ScorePoints => {
-  return {
-    1: matching(1, roll.filter((die) => die === 1).length),
-    2: matching(2, roll.filter((die) => die === 2).length),
-    3: matching(3, roll.filter((die) => die === 3).length),
-    4: matching(4, roll.filter((die) => die === 4).length),
-    5: matching(5, roll.filter((die) => die === 5).length),
-    6: matching(6, roll.filter((die) => die === 6).length),
-    three: ofAKind(roll, "three"),
-    four: ofAKind(roll, "four"),
-    shortStraight: straight(roll, "short"),
-    largeStraight: straight(roll, "large"),
-    fullHouse: fullHouse(roll),
-    yatzi: yatzi(roll),
-    chance: roll.reduce((acc, curr) => acc + curr),
-  };
-};
 function App() {
   const [roll, setRoll] = useState<any[]>(rollDiceNew());
-  const [kept, setKept] = useState<string[]>([]);
+  const [kept, setKept] = useState<number[]>([]);
   const [turns, setTurns] = useState<number>(0);
   const [round, setRound] = useState<number>(0);
+
+  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>({});
   const [scoreOptions, setScoreOptions] = useState<ScorePoints>(
-    calculatePoints(roll)
+    calculatePoints(roll, scoreKept)
   );
 
+  const [turnOver, setTurnOver] = useState<boolean>(false);
+  const [gameFinished, setGameFinished] = useState<boolean>(false);
+
   useEffect(() => {
-    console.log(roll, kept, turns, round);
-  }, [roll, kept, turns, round]);
+    if (Object.keys(scoreKept).length >= Object.keys(scoreOptions).length)
+      setGameFinished(true);
+    setKept([]);
+    setTurns(0);
+    setRound(1);
+  }, [scoreKept]);
 
   return (
     <div className="App">
       <div className="score-board">
-        <ScoreBoard points={scoreOptions} />
+        <ScoreBoard
+          points={scoreOptions}
+          scoreKept={scoreKept}
+          setScoreKept={setScoreKept}
+          turnOver={turnOver}
+          setTurnOver={setTurnOver}
+        />
       </div>
       <div className="dice-row">
         <p>Turns left: {3 - turns}</p>
@@ -154,14 +48,14 @@ function App() {
             onClick={(e) => {
               e.stopPropagation();
               const target = e.target as HTMLDivElement;
-              keep(target?.id, kept, setKept);
+              keep(parseInt(target?.id), kept, setKept);
             }}
-            className={kept.includes(i.toString()) ? "kept" : ""}
+            className={kept.includes(i) ? "kept" : ""}
           />
         ))}
       </div>
       <div className="game-buttons">
-        {turns < 3 && (
+        {turns < 3 && !turnOver && (
           <Button
             onClick={() => {
               if (turns === 3) {
@@ -170,12 +64,12 @@ function App() {
                 setKept([]);
                 setTurns(1);
                 setRound((round) => round + 1);
-                setScoreOptions(calculatePoints(newRoll));
+                setScoreOptions(calculatePoints(newRoll, scoreKept));
                 return;
               }
               const newRoll = rollDice(roll, kept);
               setRoll(newRoll);
-              setScoreOptions(calculatePoints(newRoll));
+              setScoreOptions(calculatePoints(newRoll, scoreKept));
               setRound((round) => round + 1);
               setTurns((turns) => turns + 1);
             }}
@@ -184,20 +78,29 @@ function App() {
             Roll available only
           </Button>
         )}
-        <Button
-          onClick={() => {
-            const newRoll = rollDiceNew();
-            setRoll(newRoll);
-            setKept([]);
-            setTurns(1);
-            setRound((round) => round + 1);
-            setScoreOptions(calculatePoints(newRoll));
-          }}
-          variant="outlined"
-          color="success"
-        >
-          Roll new
-        </Button>
+        {turnOver && (
+          <Button
+            onClick={() => {
+              const newRoll = rollDiceNew();
+              setRoll(newRoll);
+              setKept([]);
+              setTurns(1);
+              setRound((round) => round + 1);
+              setScoreOptions(calculatePoints(newRoll, scoreKept));
+              setTurnOver(false);
+            }}
+            variant="outlined"
+            color="success"
+          >
+            Roll new
+          </Button>
+        )}
+        <TransitionsModal
+          open={gameFinished}
+          setOpen={setGameFinished}
+          scoreKept={scoreKept}
+          setScoreKept={setScoreKept}
+        />
       </div>
     </div>
   );
