@@ -6,6 +6,8 @@ import { Button } from "@mui/base/Button";
 import { ScorePoints } from "./Score";
 import { calculateTotals } from "../helpers";
 
+import Confetti from "react-confetti";
+
 export default function TransitionsModal({
   open,
   setOpen,
@@ -21,6 +23,9 @@ export default function TransitionsModal({
     setOpen(false);
     setScoreKept({});
   };
+
+  const width = window.innerWidth;
+  const height = window.innerHeight;
 
   return (
     <div>
@@ -46,6 +51,7 @@ export default function TransitionsModal({
           </ModalContent>
         </Fade>
       </Modal>
+      {open && <Confetti width={width} height={height} />}
     </div>
   );
 }
