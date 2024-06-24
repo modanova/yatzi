@@ -13,7 +13,7 @@ function App() {
   const [scoreOptions, setScoreOptions] = useState<ScorePoints>(
     calculatePoints(roll)
   );
-  const [score, setScore] = useState<Partial<ScorePoints>>({});
+  const [score, setScore] = useState<Partial<ScorePoints | NumberMap>>({});
 
   useEffect(() => {
     console.log(roll, kept, turns, round);

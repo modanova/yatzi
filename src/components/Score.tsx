@@ -1,12 +1,8 @@
+import { Dispatch, SetStateAction } from "react";
 import { calculateTopTotal } from "../helpers";
 
+type SameNumber = 1 | 2 | 3 | 4 | 5 | 6;
 type YatziBonus =
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
   | "threeOfAKind"
   | "fourOfAKind"
   | "shortStraight"
@@ -17,7 +13,7 @@ type YatziBonus =
   | "chance";
 
 export type ScorePoints = {
-  [key in YatziBonus]: number;
+  [key in YatziBonus | SameNumber]: number;
 };
 
 interface BoardProps {
@@ -38,21 +34,19 @@ function ScoreBoard(props: BoardProps) {
     points["yatzi"] +
     points["chance"];
   return (
-    <table>
+    <table
+      onClick={(e: React.MouseEvent<HTMLTableElement, MouseEvent>) => {
+        console.log(e.target?.id);
+        return true;
+      }}
+    >
       <tr>
         <th>Player</th>
         <th>Bob</th>
       </tr>
       <tr>
         <td>Ones</td>
-        <td
-          id="ones"
-          onClick={(e) => {
-            console.log(e.target.innerText);
-          }}
-        >
-          {points[1]}{" "}
-        </td>
+        <td id="ones">{points[1]}</td>
       </tr>
       <tr>
         <td>Twos</td>
@@ -76,15 +70,15 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Top Total</td>
-        <td id="topTotal">{topTotal}</td>
+        <td>{topTotal}</td>
       </tr>
       <tr>
         <td>Three of a kind</td>
-        <td id="three">{points["threeOfAKind"]} </td>
+        <td id="threeOfAKind">{points["threeOfAKind"]} </td>
       </tr>
       <tr>
         <td>Four of a kind</td>
-        <td id="four">{points["fourOfAKind"]} </td>
+        <td id="fourOfAKind">{points["fourOfAKind"]} </td>
       </tr>
       <tr>
         <td>Short Straight</td>
@@ -108,11 +102,11 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Bottom Total</td>
-        <td id="bottomTotal">{bottomTotal}</td>
+        <td>{bottomTotal}</td>
       </tr>
       <tr>
         <td>All Total</td>
-        <td id="allTotal">{topTotal + bottomTotal} </td>
+        <td>{topTotal + bottomTotal} </td>
       </tr>
     </table>
   );
