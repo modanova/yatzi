@@ -49,27 +49,28 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 TODO
 
-- [ ]
-
+- [ ] keep the points for the selected score
+- [ ] to not allow clicking if score points are kept
+- [ ] button to change your mind when you have clicked into a score
 
 const numberToWord = (index: SameNumber) => {
-  switch (index) {
-  case 1:
-  return "one";
-  case 2:
-  return "two";
-  case 3:
-  return "three";
-  case 4:
-  return "four";
-  case 5:
-  return "five";
-  case 6:
-  return "six";
-  default:
-  return "zero";
-  }
-  };
+switch (index) {
+case 1:
+return "one";
+case 2:
+return "two";
+case 3:
+return "three";
+case 4:
+return "four";
+case 5:
+return "five";
+case 6:
+return "six";
+default:
+return "zero";
+}
+};
 
 const wordToNumber = (word: SameNumberWords) => {
 switch (word) {

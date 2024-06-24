@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { calculateTopTotal } from "../helpers";
+import "./score.styles.css";
 
 export type SameNumber = 1 | 2 | 3 | 4 | 5 | 6;
 export type SameNumberWords = "one" | "two" | "three" | "four" | "five" | "six";
@@ -20,10 +21,15 @@ export type ScorePoints = {
 
 interface BoardProps {
   points: ScorePoints;
+  turnOver: boolean;
+  setTurnOver: Dispatch<React.SetStateAction<Partial<boolean>>>;
 }
 
 function ScoreBoard(props: BoardProps) {
-  const { points } = props;
+  const { points, turnOver, setTurnOver } = props;
+  const scoreKeep: Partial<ScorePoints> = { one: 6, four: 12 };
+  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>(scoreKeep);
+
   const topTotal = calculateTopTotal([
     points["one"] +
       points["two"] +
@@ -40,10 +46,28 @@ function ScoreBoard(props: BoardProps) {
     points["fullHouse"] +
     points["yatzi"] +
     points["chance"];
+
   return (
     <table
+      className="table"
       onClick={(e: React.MouseEvent<HTMLTableElement, MouseEvent>) => {
-        console.log(e.target);
+        if (turnOver) return;
+        const id = (e?.target as HTMLTableElement)?.id;
+        if (id && id in points) {
+          console.log(id);
+          console.log(points[id as SameNumberWords]);
+
+          if (id in scoreKept) {
+            console.log(scoreKept[id as SameNumberWords]);
+            return;
+            // if you click in this one - do nothing
+          }
+          setScoreKept((score) => ({
+            ...score,
+            [id as SameNumberWords]: points[id as SameNumberWords],
+          }));
+          setTurnOver(true);
+        }
         return true;
       }}
     >
@@ -53,67 +77,142 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Ones</td>
-        <td id="ones">{points["one"]}</td>
+        <td
+          className={`${"one" in scoreKept ? "kept-score" : "score-option"}`}
+          id="one"
+        >
+          {points["one"]}
+        </td>
       </tr>
       <tr>
         <td>Twos</td>
-        <td id="twos">{points["two"]} </td>
+        <td
+          className={`${"two" in scoreKept ? "kept-score" : "score-option"}`}
+          id="two"
+        >
+          {points["two"]}
+        </td>
       </tr>
       <tr>
         <td>Threes</td>
-        <td id="threes">{points["three"]} </td>
+        <td
+          className={`${"three" in scoreKept ? "kept-score" : "score-option"}`}
+          id="three"
+        >
+          {points["three"]}
+        </td>
       </tr>
       <tr>
         <td>Fours</td>
-        <td id="fours">{points["four"]} </td>
+        <td
+          className={`${"four" in scoreKept ? "kept-score" : "score-option"}`}
+          id="four"
+        >
+          {points["four"]}
+        </td>
       </tr>
       <tr>
         <td>Fives</td>
-        <td id="fives">{points["five"]} </td>
+        <td
+          className={`${"five" in scoreKept ? "kept-score" : "score-option"}`}
+          id="five"
+        >
+          {points["five"]}
+        </td>
       </tr>
       <tr>
         <td>Sixes</td>
-        <td id="sixes">{points["six"]} </td>
+        <td
+          className={`${"six" in scoreKept ? "kept-score" : "score-option"}`}
+          id="six"
+        >
+          {points["six"]}
+        </td>
       </tr>
       <tr>
         <td>Top Total</td>
-        <td>{topTotal}</td>
+        <td className="totals">{topTotal}</td>
       </tr>
       <tr>
         <td>Three of a kind</td>
-        <td id="threeOfAKind">{points["threeOfAKind"]} </td>
+        <td
+          className={`${
+            "threeOfAKind" in scoreKept ? "kept-score" : "score-option"
+          }`}
+          id="threeOfAKind"
+        >
+          {points["threeOfAKind"]}
+        </td>
       </tr>
       <tr>
         <td>Four of a kind</td>
-        <td id="fourOfAKind">{points["fourOfAKind"]} </td>
+        <td
+          className={`${
+            "fourOfAKind" in scoreKept ? "kept-score" : "score-option"
+          }`}
+          id="fourOfAKind"
+        >
+          {points["fourOfAKind"]}
+        </td>
       </tr>
       <tr>
         <td>Short Straight</td>
-        <td id="shortStraight">{points["shortStraight"]} </td>
+        <td
+          className={`${
+            "shortStraight" in scoreKept ? "kept-score" : "score-option"
+          }`}
+          id="shortStraight"
+        >
+          {points["shortStraight"]}
+        </td>
       </tr>
       <tr>
         <td>Large Straight</td>
-        <td id="largeStraight">{points["largeStraight"]} </td>
+        <td
+          className={`${
+            "largeStraight" in scoreKept ? "kept-score" : "score-option"
+          }`}
+          id="largeStraight"
+        >
+          {points["largeStraight"]}
+        </td>
       </tr>
       <tr>
         <td>Full House</td>
-        <td id="fullHouse">{points["fullHouse"]} </td>
+        <td
+          className={`${
+            "fullHouse" in scoreKept ? "kept-score" : "score-option"
+          }`}
+          id="fullHouse"
+        >
+          {points["fullHouse"]}
+        </td>
       </tr>
       <tr>
         <td>Yatzi</td>
-        <td id="yatzi">{points["yatzi"]} </td>
+        <td
+          className={`${"yatzi" in scoreKept ? "kept-score" : "score-option"}`}
+          id="yatzi"
+        >
+          {points["yatzi"]}
+        </td>
       </tr>
       <tr>
         <td>Chance</td>
-        <td id="chance">{points["chance"]} </td>
+        <td
+          className={`${"chance" in scoreKept ? "kept-score" : "score-option"}`}
+          id="chance"
+        >
+          {points["chance"]}
+        </td>
       </tr>
       <tr>
         <td>Bottom Total</td>
-        <td>{bottomTotal}</td>
+        <td className="totals">{bottomTotal}</td>
       </tr>
       <tr>
         <td>All Total</td>
-        <td>{topTotal + bottomTotal} </td>
+        <td className="totals">{topTotal + bottomTotal} </td>
       </tr>
     </table>
   );

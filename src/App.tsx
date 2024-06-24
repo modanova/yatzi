@@ -14,6 +14,7 @@ function App() {
     calculatePoints(roll)
   );
   const [score, setScore] = useState<Partial<ScorePoints>>({});
+  const [turnOver, setTurnOver] = useState<boolean>(false);
 
   useEffect(() => {
     // console.log(roll, kept, turns, round);
@@ -22,7 +23,11 @@ function App() {
   return (
     <div className="App">
       <div className="score-board">
-        <ScoreBoard points={scoreOptions} />
+        <ScoreBoard
+          points={scoreOptions}
+          turnOver={turnOver}
+          setTurnOver={setTurnOver}
+        />
       </div>
       <div className="dice-row">
         <p>Turns left: {3 - turns}</p>
@@ -40,7 +45,7 @@ function App() {
         ))}
       </div>
       <div className="game-buttons">
-        {turns < 3 && (
+        {turns < 3 && !turnOver && (
           <Button
             onClick={() => {
               if (turns === 3) {
@@ -71,6 +76,7 @@ function App() {
             setTurns(1);
             setRound((round) => round + 1);
             setScoreOptions(calculatePoints(newRoll));
+            setTurnOver(false);
           }}
           variant="outlined"
           color="success"
