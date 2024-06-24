@@ -1,8 +1,10 @@
 import { Dispatch, SetStateAction } from "react";
 import { calculateTopTotal } from "../helpers";
 
-type SameNumber = 1 | 2 | 3 | 4 | 5 | 6;
-type YatziBonus =
+export type SameNumber = 1 | 2 | 3 | 4 | 5 | 6;
+export type SameNumberWords = "one" | "two" | "three" | "four" | "five" | "six";
+
+export type YatziBonus =
   | "threeOfAKind"
   | "fourOfAKind"
   | "shortStraight"
@@ -13,7 +15,7 @@ type YatziBonus =
   | "chance";
 
 export type ScorePoints = {
-  [key in YatziBonus | SameNumber]: number;
+  [key in YatziBonus | SameNumberWords]: number;
 };
 
 interface BoardProps {
@@ -23,7 +25,12 @@ interface BoardProps {
 function ScoreBoard(props: BoardProps) {
   const { points } = props;
   const topTotal = calculateTopTotal([
-    points[1] + points[2] + points[3] + points[4] + points[5] + points[6],
+    points["one"] +
+      points["two"] +
+      points["three"] +
+      points["four"] +
+      points["five"] +
+      points["six"],
   ]);
   const bottomTotal =
     points["threeOfAKind"] +
@@ -36,7 +43,7 @@ function ScoreBoard(props: BoardProps) {
   return (
     <table
       onClick={(e: React.MouseEvent<HTMLTableElement, MouseEvent>) => {
-        console.log(e.target?.id);
+        console.log(e.target);
         return true;
       }}
     >
@@ -46,27 +53,27 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Ones</td>
-        <td id="ones">{points[1]}</td>
+        <td id="ones">{points["one"]}</td>
       </tr>
       <tr>
         <td>Twos</td>
-        <td id="twos">{points[2]} </td>
+        <td id="twos">{points["two"]} </td>
       </tr>
       <tr>
         <td>Threes</td>
-        <td id="threes">{points[3]} </td>
+        <td id="threes">{points["three"]} </td>
       </tr>
       <tr>
         <td>Fours</td>
-        <td id="fours">{points[4]} </td>
+        <td id="fours">{points["four"]} </td>
       </tr>
       <tr>
         <td>Fives</td>
-        <td id="fives">{points[5]} </td>
+        <td id="fives">{points["five"]} </td>
       </tr>
       <tr>
         <td>Sixes</td>
-        <td id="sixes">{points[6]} </td>
+        <td id="sixes">{points["six"]} </td>
       </tr>
       <tr>
         <td>Top Total</td>

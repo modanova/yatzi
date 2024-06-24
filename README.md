@@ -44,3 +44,55 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+===================
+
+TODO
+
+- [ ]
+
+
+const numberToWord = (index: SameNumber) => {
+  switch (index) {
+  case 1:
+  return "one";
+  case 2:
+  return "two";
+  case 3:
+  return "three";
+  case 4:
+  return "four";
+  case 5:
+  return "five";
+  case 6:
+  return "six";
+  default:
+  return "zero";
+  }
+  };
+
+const wordToNumber = (word: SameNumberWords) => {
+switch (word) {
+case "one":
+return 1;
+
+    case "two":
+      return 2;
+
+    case "three":
+      return 3;
+
+    case "four":
+      return 4;
+
+    case "five":
+      return 5;
+
+    case "six":
+      return 6;
+
+    default:
+      return 0;
+
+}
+};

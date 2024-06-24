@@ -6,9 +6,7 @@ const rollNumber = (): number => {
 
 const rollDiceNew = () => {
   const dice = new Array(5).fill(0);
-  console.log(dice);
   const newDice = dice.map(() => rollNumber());
-  console.log(newDice);
   return newDice;
 };
 
@@ -113,12 +111,12 @@ const yatzi = (roll: number[]) => {
 
 const calculatePoints = (roll: number[]): ScorePoints => {
   return {
-    1: matching(1, roll.filter((die) => die === 1).length),
-    2: matching(2, roll.filter((die) => die === 2).length),
-    3: matching(3, roll.filter((die) => die === 3).length),
-    4: matching(4, roll.filter((die) => die === 4).length),
-    5: matching(5, roll.filter((die) => die === 5).length),
-    6: matching(6, roll.filter((die) => die === 6).length),
+    one: matching(1, roll.filter((die) => die === 1).length),
+    two: matching(2, roll.filter((die) => die === 2).length),
+    three: matching(3, roll.filter((die) => die === 3).length),
+    four: matching(4, roll.filter((die) => die === 4).length),
+    five: matching(5, roll.filter((die) => die === 5).length),
+    six: matching(6, roll.filter((die) => die === 6).length),
     threeOfAKind: ofAKind(roll, "three"),
     fourOfAKind: ofAKind(roll, "four"),
     shortStraight: straight(roll, "short"),

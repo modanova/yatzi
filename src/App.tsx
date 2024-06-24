@@ -16,7 +16,7 @@ function App() {
   const [score, setScore] = useState<Partial<ScorePoints>>({});
 
   useEffect(() => {
-    console.log(roll, kept, turns, round);
+    // console.log(roll, kept, turns, round);
   }, [roll, kept, turns, round]);
 
   return (
