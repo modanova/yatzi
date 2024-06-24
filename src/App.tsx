@@ -4,6 +4,7 @@ import Dice from "./components/Dice";
 import Button from "@mui/material/Button";
 import ScoreBoard, { ScorePoints } from "./components/Score";
 import { calculatePoints, keep, rollDice, rollDiceNew } from "./helpers";
+import TransitionsModal from "./components/Modal";
 
 function App() {
   const [roll, setRoll] = useState<any[]>(rollDiceNew());
@@ -11,19 +12,21 @@ function App() {
   const [turns, setTurns] = useState<number>(0);
   const [round, setRound] = useState<number>(0);
 
-  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>({
-    one: 6,
-    four: 12,
-  });
+  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>({});
   const [scoreOptions, setScoreOptions] = useState<ScorePoints>(
     calculatePoints(roll, scoreKept)
   );
 
   const [turnOver, setTurnOver] = useState<boolean>(false);
+  const [gameFinished, setGameFinished] = useState<boolean>(false);
 
-  // useEffect(() => {
-  // console.log(roll, kept, turns, round)
-  // }, [roll, kept, turns, round]);
+  useEffect(() => {
+    if (Object.keys(scoreKept).length >= Object.keys(scoreOptions).length)
+      setGameFinished(true);
+    setKept([]);
+    setTurns(0);
+    setRound(1);
+  }, [scoreKept]);
 
   return (
     <div className="App">
@@ -92,6 +95,12 @@ function App() {
             Roll new
           </Button>
         )}
+        <TransitionsModal
+          open={gameFinished}
+          setOpen={setGameFinished}
+          scoreKept={scoreKept}
+          setScoreKept={setScoreKept}
+        />
       </div>
     </div>
   );
