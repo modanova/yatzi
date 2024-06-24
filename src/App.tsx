@@ -75,21 +75,23 @@ function App() {
             Roll available only
           </Button>
         )}
-        <Button
-          onClick={() => {
-            const newRoll = rollDiceNew();
-            setRoll(newRoll);
-            setKept([]);
-            setTurns(1);
-            setRound((round) => round + 1);
-            setScoreOptions(calculatePoints(newRoll, scoreKept));
-            setTurnOver(false);
-          }}
-          variant="outlined"
-          color="success"
-        >
-          Roll new
-        </Button>
+        {turnOver && (
+          <Button
+            onClick={() => {
+              const newRoll = rollDiceNew();
+              setRoll(newRoll);
+              setKept([]);
+              setTurns(1);
+              setRound((round) => round + 1);
+              setScoreOptions(calculatePoints(newRoll, scoreKept));
+              setTurnOver(false);
+            }}
+            variant="outlined"
+            color="success"
+          >
+            Roll new
+          </Button>
+        )}
       </div>
     </div>
   );

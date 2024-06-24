@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { calculateTotals } from "../helpers";
 import "./score.styles.css";
 
