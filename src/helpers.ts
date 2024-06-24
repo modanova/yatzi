@@ -66,14 +66,16 @@ const ofAKind = (roll: number[], size: "three" | "four") => {
 
 const straight = (roll: number[], size: "large" | "short") => {
   const sorted = Array.from(new Set([...roll].sort()));
-  if (sorted.length <= 4) return 0;
+  if (sorted.length < 4) return 0;
 
+  console.log(sorted);
   if (
     size === "large" &&
     sorted.reduce((acc: number, next: number) => {
       if (next === acc + 1) acc++;
       return acc;
-    }, 0) > 4
+    }, sorted[0]) ===
+      sorted[0] + 4
   )
     return 40;
 
@@ -82,7 +84,8 @@ const straight = (roll: number[], size: "large" | "short") => {
     sorted.reduce((acc: number, next: number) => {
       if (next === acc + 1) acc++;
       return acc;
-    }, 0) >= 4
+    }, sorted[0]) >=
+      sorted[0] + 3
   )
     return 30;
 
