@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { calculateTopTotal } from "../helpers";
+import { calculateTotals } from "../helpers";
 import "./score.styles.css";
 
 export type SameNumber = 1 | 2 | 3 | 4 | 5 | 6;
@@ -30,22 +30,8 @@ interface BoardProps {
 function ScoreBoard(props: BoardProps) {
   const { points, scoreKept, setScoreKept, turnOver, setTurnOver } = props;
 
-  const topTotal = calculateTopTotal([
-    points["one"] +
-      points["two"] +
-      points["three"] +
-      points["four"] +
-      points["five"] +
-      points["six"],
-  ]);
-  const bottomTotal =
-    points["threeOfAKind"] +
-    points["fourOfAKind"] +
-    points["shortStraight"] +
-    points["largeStraight"] +
-    points["fullHouse"] +
-    points["yatzi"] +
-    points["chance"];
+  const topTotal = calculateTotals(scoreKept, "top");
+  const bottomTotal = calculateTotals(scoreKept, "bottom");
 
   return (
     <table
@@ -64,7 +50,7 @@ function ScoreBoard(props: BoardProps) {
           }
           setScoreKept((score) => ({
             ...score,
-            [id as SameNumberWords]: points[id as SameNumberWords] || "/",
+            [id as SameNumberWords]: points[id as SameNumberWords],
           }));
           setTurnOver(true);
         }

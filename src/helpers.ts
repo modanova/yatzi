@@ -112,28 +112,93 @@ const yatzi = (roll: number[]) => {
   return new Set(roll).size === 1 ? 50 : 0;
 };
 
-const calculatePoints = (roll: number[]): ScorePoints => {
+const calculatePoints = (
+  roll: number[],
+  scoreKept: Partial<ScorePoints>
+): ScorePoints => {
   return {
-    one: matching(1, roll.filter((die) => die === 1).length),
-    two: matching(2, roll.filter((die) => die === 2).length),
-    three: matching(3, roll.filter((die) => die === 3).length),
-    four: matching(4, roll.filter((die) => die === 4).length),
-    five: matching(5, roll.filter((die) => die === 5).length),
-    six: matching(6, roll.filter((die) => die === 6).length),
-    threeOfAKind: ofAKind(roll, "three"),
-    fourOfAKind: ofAKind(roll, "four"),
-    shortStraight: straight(roll, "short"),
-    largeStraight: straight(roll, "large"),
-    fullHouse: fullHouse(roll),
-    yatzi: yatzi(roll),
-    chance: roll.reduce((acc, curr) => acc + curr),
+    one:
+      scoreKept["one"] ||
+      (scoreKept["one"] === 0
+        ? 0
+        : matching(1, roll.filter((die) => die === 1).length)),
+    two:
+      scoreKept["two"] ||
+      (scoreKept["two"] === 0
+        ? 0
+        : matching(2, roll.filter((die) => die === 2).length)),
+    three:
+      scoreKept["three"] ||
+      (scoreKept["three"] === 0
+        ? 0
+        : matching(3, roll.filter((die) => die === 3).length)),
+    four:
+      scoreKept["four"] ||
+      (scoreKept["four"] === 0
+        ? 0
+        : matching(4, roll.filter((die) => die === 4).length)),
+    five:
+      scoreKept["five"] ||
+      (scoreKept["five"] === 0
+        ? 0
+        : matching(5, roll.filter((die) => die === 5).length)),
+    six:
+      scoreKept["six"] ||
+      (scoreKept["six"] === 0
+        ? 0
+        : matching(6, roll.filter((die) => die === 6).length)),
+    threeOfAKind:
+      scoreKept["threeOfAKind"] ||
+      (scoreKept["threeOfAKind"] === 0 ? 0 : ofAKind(roll, "three")),
+    fourOfAKind:
+      scoreKept["fourOfAKind"] ||
+      (scoreKept["fourOfAKind"] === 0 ? 0 : ofAKind(roll, "four")),
+    shortStraight:
+      scoreKept["shortStraight"] ||
+      (scoreKept["shortStraight"] === 0 ? 0 : straight(roll, "short")),
+    largeStraight:
+      scoreKept["largeStraight"] ||
+      (scoreKept["largeStraight"] === 0 ? 0 : straight(roll, "large")),
+    fullHouse:
+      scoreKept["fullHouse"] ||
+      (scoreKept["fullHouse"] === 0 ? 0 : fullHouse(roll)),
+    yatzi: scoreKept["yatzi"] || (scoreKept["yatzi"] === 0 ? 0 : yatzi(roll)),
+    chance:
+      scoreKept["chance"] ||
+      (scoreKept["chance"] === 0 ? 0 : roll.reduce((acc, curr) => acc + curr)),
   };
 };
 
-const calculateTopTotal = (top: number[]) => {
-  let sum = top.reduce((acc, next) => acc + next);
-  if (sum >= 65) sum = sum + 35;
-  return sum;
+const calculateTotals = (
+  scoreKept: Partial<ScorePoints>,
+  whichHalf: "top" | "bottom"
+) => {
+  switch (whichHalf) {
+    case "top":
+      const top: number[] = [
+        scoreKept["one"] || 0,
+        scoreKept["two"] || 0,
+        scoreKept["three"] || 0,
+        scoreKept["four"] || 0,
+        scoreKept["five"] || 0,
+        scoreKept["six"] || 0,
+      ];
+      let sumTop = top.reduce((acc, next) => acc + next);
+      if (sumTop >= 65) sumTop = sumTop + 35;
+      return sumTop;
+    case "bottom":
+      const bottom: number[] = [
+        (scoreKept["threeOfAKind"] || 0) +
+          (scoreKept["fourOfAKind"] || 0) +
+          (scoreKept["shortStraight"] || 0) +
+          (scoreKept["largeStraight"] || 0) +
+          (scoreKept["fullHouse"] || 0) +
+          (scoreKept["yatzi"] || 0) +
+          (scoreKept["chance"] || 0),
+      ];
+      let sumBottom = bottom.reduce((acc, next) => acc + next);
+      return sumBottom;
+  }
 };
 
 export {
@@ -147,5 +212,5 @@ export {
   fullHouse,
   yatzi,
   calculatePoints,
-  calculateTopTotal,
+  calculateTotals,
 };

@@ -10,13 +10,15 @@ function App() {
   const [kept, setKept] = useState<number[]>([]);
   const [turns, setTurns] = useState<number>(0);
   const [round, setRound] = useState<number>(0);
+
+  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>({
+    one: 6,
+    four: 12,
+  });
   const [scoreOptions, setScoreOptions] = useState<ScorePoints>(
-    calculatePoints(roll)
+    calculatePoints(roll, scoreKept)
   );
 
-  const scoreKeep: Partial<ScorePoints> = { one: 6, four: 12 };
-
-  const [scoreKept, setScoreKept] = useState<Partial<ScorePoints>>(scoreKeep);
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
   // useEffect(() => {
@@ -59,12 +61,12 @@ function App() {
                 setKept([]);
                 setTurns(1);
                 setRound((round) => round + 1);
-                setScoreOptions(calculatePoints(newRoll));
+                setScoreOptions(calculatePoints(newRoll, scoreKept));
                 return;
               }
               const newRoll = rollDice(roll, kept);
               setRoll(newRoll);
-              setScoreOptions(calculatePoints(newRoll));
+              setScoreOptions(calculatePoints(newRoll, scoreKept));
               setRound((round) => round + 1);
               setTurns((turns) => turns + 1);
             }}
@@ -80,7 +82,7 @@ function App() {
             setKept([]);
             setTurns(1);
             setRound((round) => round + 1);
-            setScoreOptions(calculatePoints(newRoll));
+            setScoreOptions(calculatePoints(newRoll, scoreKept));
             setTurnOver(false);
           }}
           variant="outlined"
