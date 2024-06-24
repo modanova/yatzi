@@ -21,8 +21,7 @@ function App() {
   const [gameFinished, setGameFinished] = useState<boolean>(false);
 
   useEffect(() => {
-    if (Object.keys(scoreKept).length >= Object.keys(scoreOptions).length)
-      setGameFinished(true);
+    if (Object.keys(scoreKept).length >= 2) setGameFinished(true);
     setKept([]);
     setTurns(0);
     setRound(1);
