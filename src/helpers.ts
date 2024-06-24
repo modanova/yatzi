@@ -129,6 +129,12 @@ const calculatePoints = (roll: number[]): ScorePoints => {
   };
 };
 
+const calculateTopTotal = (top: number[]) => {
+  let sum = top.reduce((acc, next) => acc + next);
+  if (sum >= 65) sum = sum + 35;
+  return sum;
+};
+
 export {
   rollNumber,
   rollDiceNew,
@@ -140,4 +146,5 @@ export {
   fullHouse,
   yatzi,
   calculatePoints,
+  calculateTopTotal,
 };

@@ -1,3 +1,5 @@
+import { calculateTopTotal } from "../helpers";
+
 type YatziBonus =
   | 1
   | 2
@@ -24,9 +26,12 @@ interface BoardProps {
 
 function ScoreBoard(props: BoardProps) {
   const { points } = props;
-  const topTotal =
-    points[1] + points[2] + points[3] + points[4] + points[5] + points[6];
+  const topTotal = calculateTopTotal([
+    points[1] + points[2] + points[3] + points[4] + points[5] + points[6],
+  ]);
   const bottomTotal =
+    points["three"] +
+    points["four"] +
     points["shortStraight"] +
     points["largeStraight"] +
     points["fullHouse"] +
@@ -40,7 +45,13 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Ones</td>
-        <td>{points[1]} </td>
+        <td
+          onClick={(e) => {
+            console.log(e.target.innerText);
+          }}
+        >
+          {points[1]}{" "}
+        </td>
       </tr>
       <tr>
         <td>Twos</td>
