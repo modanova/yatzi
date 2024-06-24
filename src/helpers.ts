@@ -43,7 +43,7 @@ const matching = (number: number, amount: number) => {
 const ofAKind = (roll: number[], size: "three" | "four") => {
   const copyOfRoll: number[] = [...roll];
   const sorted = copyOfRoll.sort();
-  if (new Set(sorted).size === 2) {
+  if (new Set(sorted).size <= 3) {
     const counts = sorted.reduce(
       (acc: { [key: string | number]: number }, value) => ({
         ...acc,
@@ -119,8 +119,8 @@ const calculatePoints = (roll: number[]): ScorePoints => {
     4: matching(4, roll.filter((die) => die === 4).length),
     5: matching(5, roll.filter((die) => die === 5).length),
     6: matching(6, roll.filter((die) => die === 6).length),
-    three: ofAKind(roll, "three"),
-    four: ofAKind(roll, "four"),
+    threeOfAKind: ofAKind(roll, "three"),
+    fourOfAKind: ofAKind(roll, "four"),
     shortStraight: straight(roll, "short"),
     largeStraight: straight(roll, "large"),
     fullHouse: fullHouse(roll),

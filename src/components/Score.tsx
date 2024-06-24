@@ -7,8 +7,8 @@ type YatziBonus =
   | 4
   | 5
   | 6
-  | "three"
-  | "four"
+  | "threeOfAKind"
+  | "fourOfAKind"
   | "shortStraight"
   | "shortStraight"
   | "largeStraight"
@@ -30,8 +30,8 @@ function ScoreBoard(props: BoardProps) {
     points[1] + points[2] + points[3] + points[4] + points[5] + points[6],
   ]);
   const bottomTotal =
-    points["three"] +
-    points["four"] +
+    points["threeOfAKind"] +
+    points["fourOfAKind"] +
     points["shortStraight"] +
     points["largeStraight"] +
     points["fullHouse"] +
@@ -46,6 +46,7 @@ function ScoreBoard(props: BoardProps) {
       <tr>
         <td>Ones</td>
         <td
+          id="ones"
           onClick={(e) => {
             console.log(e.target.innerText);
           }}
@@ -55,63 +56,63 @@ function ScoreBoard(props: BoardProps) {
       </tr>
       <tr>
         <td>Twos</td>
-        <td>{points[2]} </td>
+        <td id="twos">{points[2]} </td>
       </tr>
       <tr>
         <td>Threes</td>
-        <td>{points[3]} </td>
+        <td id="threes">{points[3]} </td>
       </tr>
       <tr>
         <td>Fours</td>
-        <td>{points[4]} </td>
+        <td id="fours">{points[4]} </td>
       </tr>
       <tr>
         <td>Fives</td>
-        <td>{points[5]} </td>
+        <td id="fives">{points[5]} </td>
       </tr>
       <tr>
         <td>Sixes</td>
-        <td>{points[6]} </td>
+        <td id="sixes">{points[6]} </td>
       </tr>
       <tr>
         <td>Top Total</td>
-        <td>{topTotal}</td>
+        <td id="topTotal">{topTotal}</td>
       </tr>
       <tr>
         <td>Three of a kind</td>
-        <td>{points["three"]} </td>
+        <td id="three">{points["threeOfAKind"]} </td>
       </tr>
       <tr>
         <td>Four of a kind</td>
-        <td>{points["four"]} </td>
+        <td id="four">{points["fourOfAKind"]} </td>
       </tr>
       <tr>
         <td>Short Straight</td>
-        <td>{points["shortStraight"]} </td>
+        <td id="shortStraight">{points["shortStraight"]} </td>
       </tr>
       <tr>
         <td>Large Straight</td>
-        <td>{points["largeStraight"]} </td>
+        <td id="largeStraight">{points["largeStraight"]} </td>
       </tr>
       <tr>
         <td>Full House</td>
-        <td>{points["fullHouse"]} </td>
+        <td id="fullHouse">{points["fullHouse"]} </td>
       </tr>
       <tr>
         <td>Yatzi</td>
-        <td>{points["yatzi"]} </td>
+        <td id="yatzi">{points["yatzi"]} </td>
       </tr>
       <tr>
         <td>Chance</td>
-        <td>{points["chance"]} </td>
+        <td id="chance">{points["chance"]} </td>
       </tr>
       <tr>
         <td>Bottom Total</td>
-        <td>{bottomTotal}</td>
+        <td id="bottomTotal">{bottomTotal}</td>
       </tr>
       <tr>
         <td>All Total</td>
-        <td>{topTotal + bottomTotal} </td>
+        <td id="allTotal">{topTotal + bottomTotal} </td>
       </tr>
     </table>
   );
